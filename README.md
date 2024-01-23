@@ -37,7 +37,7 @@ npm i
 ### Setup .env file
 
 ```js
-PROGRAM_ID=
+NEXT_PUBLIC_PROGRAM_ID = "8aZHFMQmAFfj3CniTn2hp2Ty3GVAgk3iJXSYWjp5NzR4";
 ```
 
 ### Start the app
