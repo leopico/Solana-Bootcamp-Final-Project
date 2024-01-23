@@ -1,4 +1,4 @@
-This is a [LPC-Blogapp](https://leopico-blogapp.vercel.app/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a [Restaurant Review App of Rise in course](https://leopico-blogapp.vercel.app/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ![Mind map for LPC-Blogapp](./public/next.svg)
 
