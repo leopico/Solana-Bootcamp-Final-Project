@@ -11,7 +11,7 @@ import ReviewForm from "./components/Form";
 import Link from "next/link";
 
 //Replace with your own Program_id
-const REVIEW_PROGRAM_ID = "8aZHFMQmAFfj3CniTn2hp2Ty3GVAgk3iJXSYWjp5NzR4";
+const REVIEW_PROGRAM_ID = "9eFSGq8E8779ChLirC8oEdtJfQF9d5udL9ZTcHdTGgTx";
 // console.log(typeof REVIEW_PROGRAM_ID);
 
 export default function Home() {
@@ -84,6 +84,9 @@ export default function Home() {
     };
     setLoader(false);
     setSelectedReview(null);
+    setTitle("");
+    setRating(0);
+    setDescription("");
   }
 
   const handleTransactionSubmit = async (review: Review) => {
@@ -129,6 +132,9 @@ export default function Home() {
       alert(JSON.stringify(error));
     };
     setLoader(false);
+    setTitle("");
+    setRating(0);
+    setDescription("");
   };
 
   const handleReviewCardClick = (review: Review) => {
