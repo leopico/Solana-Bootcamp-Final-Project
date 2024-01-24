@@ -1,6 +1,6 @@
 This is a [Restaurant Review App of Rise in course](https://risein-leopico.vercel.app/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-![Restaurant Review App's UI](./public/next.svg)
+![Restaurant Review App's UI](./public/app-ui.png)
 
 ### What I learned from this course:
 
@@ -14,6 +14,7 @@ This is a [Restaurant Review App of Rise in course](https://risein-leopico.verce
 - Modified for adding update's function and you can test to update when you clicked to Review card and can able to update in Form structure automatically.
 - Modified to show loading time when users trying to interact with on-chain.
 - Modified to read data which coming from on-chain that users could see "location" also.
+- Modified to metadata and title image of App.
 
 ### Program-Id
 
