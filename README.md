@@ -15,6 +15,7 @@ This is a [Restaurant Review App of Rise in course](https://risein-leopico.verce
 - Modified to show loading time when users trying to interact with on-chain.
 - Modified to read data which coming from on-chain that users could see "location" also.
 - Modified to metadata and title image of App.
+- Implemented with different branches.
 
 ### Program-Id
 
