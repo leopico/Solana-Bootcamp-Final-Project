@@ -8,7 +8,7 @@ interface CardProps {
 }
 
 const ReviewCard: FC<CardProps> = ({ review, onClick }) => {
-    const { title, description, rating } = review;
+    const { title, description, rating, location } = review;
 
     return (
         <div
@@ -21,9 +21,14 @@ const ReviewCard: FC<CardProps> = ({ review, onClick }) => {
             <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
                 {description}
             </p>
-            <p
-                className={`mt-6 max-w-[30ch] text-sm opacity-75`}
-            >{`${rating}/5`}</p>
+            <div className="mt-6 flex justify-between items-center">
+                <p
+                    className={`max-w-[30ch] text-sm opacity-75`}
+                >{`${rating}/5`}</p>
+                <p className={`max-w-[30ch] text-sm opacity-50`}>
+                    {location}
+                </p>
+            </div>
         </div>
     );
 };

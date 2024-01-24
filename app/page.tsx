@@ -24,6 +24,7 @@ export default function Home() {
   const [title, setTitle] = useState("");
   const [rating, setRating] = useState(0);
   const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
   const [loader, setLoader] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
 
@@ -36,10 +37,10 @@ export default function Home() {
 
   const handleSubmit = () => {
     if (selectedReview) {
-      const updatedReview = new Review(title, rating, description);
+      const updatedReview = new Review(title, rating, description, location);
       handleTransactionUpdateSubmit(updatedReview);
     } else {
-      const review = new Review(title, rating, description);
+      const review = new Review(title, rating, description, location);
       handleTransactionSubmit(review);
     }
   };
@@ -87,6 +88,7 @@ export default function Home() {
     setTitle("");
     setRating(0);
     setDescription("");
+    setLocation("");
   }
 
   const handleTransactionSubmit = async (review: Review) => {
@@ -135,6 +137,7 @@ export default function Home() {
     setTitle("");
     setRating(0);
     setDescription("");
+    setLocation("");
   };
 
   const handleReviewCardClick = (review: Review) => {
@@ -142,6 +145,7 @@ export default function Home() {
     setTitle(review.title);
     setDescription(review.description);
     setRating(review.rating);
+    setLocation(review.location);
   }
 
   return (
@@ -157,9 +161,11 @@ export default function Home() {
           title={title}
           description={description}
           rating={rating}
+          location={location}
           setTitle={setTitle}
           setDescription={setDescription}
           setRating={setRating}
+          setLocation={setLocation}
           handleSubmit={handleSubmit}
           loader={loader}
           selectedReview={selectedReview}
