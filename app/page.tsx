@@ -2,36 +2,141 @@
 
 import { AppBar } from "./components/AppBar";
 import ReviewCard from "./components/ReviewCard";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Review } from "./models/Review";
 import * as web3 from "@solana/web3.js";
 import { fetchReviews } from "./util/fetchReviews";
 import { useWallet } from "@solana/wallet-adapter-react";
 import ReviewForm from "./components/Form";
+import Link from "next/link";
 
 //Replace with your own Program_id
-const REVIEW_PROGRAM_ID = process.env.NEXT_PUBLIC_PROGRAM_ID;
+const REVIEW_PROGRAM_ID = "8aZHFMQmAFfj3CniTn2hp2Ty3GVAgk3iJXSYWjp5NzR4";
 // console.log(typeof REVIEW_PROGRAM_ID);
 
 export default function Home() {
+  const connection = useMemo(() => new web3.Connection(web3.clusterApiUrl("devnet")), []);
+  const { publicKey, sendTransaction } = useWallet();
+
   const [txid, setTxid] = useState("");
   const [reviews, setReviews] = useState<Review[]>([]);
 
   const [title, setTitle] = useState("");
   const [rating, setRating] = useState(0);
   const [description, setDescription] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
 
   useEffect(() => {
-    const fetchAccounts = async () => { };
+    const fetchAccounts = async () => {
+      await fetchReviews(REVIEW_PROGRAM_ID, connection).then(setReviews);
+    };
     fetchAccounts();
-  }, []);
+  }, [connection]);
 
   const handleSubmit = () => {
-    const review = new Review(title, rating, description);
-    handleTransactionSubmit(review);
+    if (selectedReview) {
+      const updatedReview = new Review(title, rating, description);
+      handleTransactionUpdateSubmit(updatedReview);
+    } else {
+      const review = new Review(title, rating, description);
+      handleTransactionSubmit(review);
+    }
   };
 
-  const handleTransactionSubmit = async (review: Review) => { };
+  const handleTransactionUpdateSubmit = async (updatedReview: Review) => {
+    // console.log(updatedReview);
+    if (!publicKey) {
+      alert('Please connect wallet');
+      return;
+    };
+    setLoader(true);
+    const buffer = updatedReview.serialize(1);
+    const transaction = new web3.Transaction();
+    const [pda] = web3.PublicKey.findProgramAddressSync(
+      [publicKey.toBuffer(), Buffer.from(updatedReview.title)],
+      new web3.PublicKey(REVIEW_PROGRAM_ID)
+    );
+    const instruction = new web3.TransactionInstruction({
+      keys: [
+        {
+          pubkey: publicKey,
+          isSigner: true,
+          isWritable: false,
+        },
+        {
+          pubkey: pda,
+          isSigner: false,
+          isWritable: true,
+        },
+      ],
+      data: buffer,
+      programId: new web3.PublicKey(REVIEW_PROGRAM_ID),
+    });
+    transaction.add(instruction);
+
+    try {
+      let txid = await sendTransaction(transaction, connection);
+      setTxid(`https://explorer.solana.com/tx/${txid}?cluster=devnet`);
+    } catch (error) {
+      console.log(JSON.stringify(error));
+      alert(JSON.stringify(error));
+    };
+    setLoader(false);
+    setSelectedReview(null);
+  }
+
+  const handleTransactionSubmit = async (review: Review) => {
+    if (!publicKey) {
+      alert('Please connect wallet');
+      return;
+    };
+    setLoader(true);
+    const buffer = review.serialize();
+    const transaction = new web3.Transaction();
+    const [pda] = web3.PublicKey.findProgramAddressSync(
+      [publicKey.toBuffer(), Buffer.from(review.title)],
+      new web3.PublicKey(REVIEW_PROGRAM_ID)
+    );
+    const instruction = new web3.TransactionInstruction({
+      keys: [
+        {
+          pubkey: publicKey,
+          isSigner: true,
+          isWritable: false,
+        },
+        {
+          pubkey: pda,
+          isSigner: false,
+          isWritable: true,
+        },
+        {
+          pubkey: web3.SystemProgram.programId,
+          isSigner: false,
+          isWritable: false,
+        },
+      ],
+      data: buffer,
+      programId: new web3.PublicKey(REVIEW_PROGRAM_ID),
+    });
+    transaction.add(instruction);
+
+    try {
+      let txid = await sendTransaction(transaction, connection);
+      setTxid(`https://explorer.solana.com/tx/${txid}?cluster=devnet`);
+    } catch (error) {
+      console.log(JSON.stringify(error));
+      alert(JSON.stringify(error));
+    };
+    setLoader(false);
+  };
+
+  const handleReviewCardClick = (review: Review) => {
+    setSelectedReview(review);
+    setTitle(review.title);
+    setDescription(review.description);
+    setRating(review.rating);
+  }
 
   return (
     <main
@@ -50,16 +155,24 @@ export default function Home() {
           setDescription={setDescription}
           setRating={setRating}
           handleSubmit={handleSubmit}
+          loader={loader}
+          selectedReview={selectedReview}
         />
       </div>
 
-      {txid && <div>{txid}</div>}
+      {txid && (
+        <div>
+          <Link href={txid} target="_blink" className="font-semibold text-purple-400 text-center text-lg">
+            See Transaction in explorer
+          </Link>
+        </div>
+      )}
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left">
+      <div className="mb-32 grid text-center sm:grid-cols-2 lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left">
         {reviews &&
           reviews.map((review) => {
             return (
-              <ReviewCard key={review.title} review={review} />
+              <ReviewCard key={review.title} review={review} onClick={() => handleReviewCardClick(review)} />
             );
           })}
       </div>

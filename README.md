@@ -34,12 +34,6 @@ git clone https://github.com/leopico/Solana-Bootcamp-Final-Project.git
 npm i
 ```
 
-### Setup .env file
-
-```js
-NEXT_PUBLIC_PROGRAM_ID = "8aZHFMQmAFfj3CniTn2hp2Ty3GVAgk3iJXSYWjp5NzR4";
-```
-
 ### Start the app
 
 ```shell
@@ -55,3 +49,5 @@ Running commands with npm `npm run [command]`
 | `dev`   | Starts a development instance of the app |
 
 ### Demo account for admin
+
+NEXT_PUBLIC_PROGRAM_ID=8aZHFMQmAFfj3CniTn2hp2Ty3GVAgk3iJXSYWjp5NzR4

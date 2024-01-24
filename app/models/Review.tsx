@@ -27,11 +27,11 @@ export class Review {
         borsh.str("title"),
     ]);
 
-    serialize(): Buffer {
+    serialize(variant: number = 0): Buffer {
         const buffer = Buffer.alloc(1000);
-        this.borshInstructionSchema.encode({ ...this, variant: 0 }, buffer);
+        this.borshInstructionSchema.encode({ ...this, variant }, buffer);
         return buffer.slice(0, this.borshInstructionSchema.getSpan(buffer));
-    }
+    };
 
     static deserialize(buffer?: Buffer): Review | null {
         if (!buffer) {

@@ -1,6 +1,7 @@
 'use client'
 
 import { FC } from "react";
+import { Review } from "../models/Review";
 
 interface FormProps {
     title: string;
@@ -10,6 +11,8 @@ interface FormProps {
     setDescription: (value: string) => void;
     setRating: (value: number) => void;
     handleSubmit: () => void;
+    loader: boolean;
+    selectedReview: Review | null
 }
 const ReviewForm: FC<FormProps> = ({
     title,
@@ -19,6 +22,8 @@ const ReviewForm: FC<FormProps> = ({
     setDescription,
     setRating,
     handleSubmit,
+    loader,
+    selectedReview
 }) => {
     const formSubmit = (e: any) => {
         e.preventDefault();
@@ -36,7 +41,7 @@ const ReviewForm: FC<FormProps> = ({
             <div className="w-full max-w-xs">
                 <div className="mb-4">
                     <label className="block text-gray-400 text-sm font-bold mb-2">
-                        Title
+                        {selectedReview ? "Can not update for Title" : "Title"}
                     </label>
                     <input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -64,7 +69,7 @@ const ReviewForm: FC<FormProps> = ({
 
                 <div className="mb-4">
                     <label className="block text-gray-400 text-sm font-bold mb-2">
-                        Rating
+                        Rating must be greater than 2 and less than 10
                     </label>
                     <input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -79,9 +84,18 @@ const ReviewForm: FC<FormProps> = ({
                 </div>
 
                 <div className="flex items-center justify-between">
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Submit
-                    </button>
+                    {
+                        selectedReview ? (
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                {loader ? "loading..." : "update"}
+                            </button>
+                        ) : (
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                {loader ? "loading..." : "submit"}
+                            </button>
+                        )
+                    }
+
                 </div>
             </div>
         </form>
